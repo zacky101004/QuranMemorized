@@ -3,10 +3,9 @@ package com.example.quranmemorization
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController // Tambahkan impor ini
 import com.example.quranmemorization.ui.navigation.AppNavigation
 import com.example.quranmemorization.ui.theme.QuranMemorizationTheme
 
@@ -15,11 +14,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             QuranMemorizationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    AppNavigation()
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    val navController = rememberNavController() // Buat instance NavHostController
+                    AppNavigation(navController = navController) // Panggil dengan parameter navController
                 }
             }
         }
