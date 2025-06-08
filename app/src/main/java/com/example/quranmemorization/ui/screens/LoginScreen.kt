@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -25,12 +24,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.quranmemorization.R
 import com.example.quranmemorization.data.api.RetrofitClient
-import com.example.quranmemorization.ui.theme.IslamicGold
-import com.example.quranmemorization.ui.theme.IslamicGreen
-import com.example.quranmemorization.ui.theme.IslamicWhite
+import com.example.quranmemorization.TokenManager
 import com.example.quranmemorization.ui.theme.QuranMemorizationTheme
 import kotlinx.coroutines.launch
-import com.example.quranmemorization.TokenManager
 
 @Composable
 fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
@@ -42,8 +38,8 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
     val context = LocalContext.current
     val tokenManager = remember { TokenManager(context) }
 
-    val clientId = "setoran-mobile-dev" // Ganti dengan client_id Anda
-    val clientSecret = "aqJp3xnXKudgC7RMOshEQP7ZoVKWzoSl" // Ganti dengan client_secret Anda
+    val clientId = "setoran-mobile-dev"
+    val clientSecret = "aqJp3xnXKudgC7RMOshEQP7ZoVKWzoSl"
     val grantType = "password"
 
     Box(
@@ -51,7 +47,7 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(IslamicWhite, IslamicGreen.copy(alpha = 0.1f))
+                    colors = listOf(Color(0xFFE0E0E0), Color(0xFF9E9E9E))
                 )
             )
     ) {
@@ -63,35 +59,34 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Logo
             Image(
-                painter = painterResource(id = R.drawable.img), // Ganti dengan nama file logo Anda
-                contentDescription = "App Logo",
+                painter = painterResource(id = R.drawable.img),
+                contentDescription = "Logo UIN SUSKA RIAU",
                 modifier = Modifier
                     .size(120.dp)
                     .padding(bottom = 16.dp)
             )
 
-            // Judul dan Subjudul
             Text(
                 text = "Quran Memorization",
                 style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp),
-                color = IslamicGreen,
+                color = Color(0xFF2E7D32),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+
             Text(
                 text = "Setoran Hafalan Mahasiswa",
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
-                color = IslamicGold,
+                color = Color(0xFFDDAA33),
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(
                     modifier = Modifier
@@ -107,8 +102,13 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = IslamicGreen,
-                            unfocusedBorderColor = IslamicGold
+                            focusedBorderColor = Color(0xFF2E7D32),
+                            unfocusedBorderColor = Color(0xFFDDAA33),
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color(0xFF2E7D32),
+                            focusedLabelColor = Color(0xFF2E7D32),
+                            unfocusedLabelColor = Color(0xFF757575)
                         )
                     )
 
@@ -122,8 +122,13 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = IslamicGreen,
-                            unfocusedBorderColor = IslamicGold
+                            focusedBorderColor = Color(0xFF2E7D32),
+                            unfocusedBorderColor = Color(0xFFDDAA33),
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color(0xFF2E7D32),
+                            focusedLabelColor = Color(0xFF2E7D32),
+                            unfocusedLabelColor = Color(0xFF757575)
                         )
                     )
 
@@ -153,11 +158,11 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
                                         scope = "openid profile email"
                                     )
                                     if (response.isSuccessful) {
-                                        response.body()?.let { authResponse ->
+                                        response.body()?.let { auth ->
                                             tokenManager.saveTokens(
-                                                accessToken = authResponse.access_token,
-                                                refreshToken = authResponse.refresh_token,
-                                                idToken = authResponse.id_token
+                                                auth.access_token,
+                                                auth.refresh_token,
+                                                auth.id_token
                                             )
                                             onLoginSuccess(username)
                                             showError = false
@@ -167,17 +172,16 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit = {}) {
                                     }
                                 } catch (e: Exception) {
                                     showError = true
-                                    e.printStackTrace()
                                 }
                             }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = IslamicGreen),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32)),
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("Login", color = IslamicWhite, style = MaterialTheme.typography.labelLarge)
+                        Text("Login", color = Color.White, style = MaterialTheme.typography.labelLarge)
                     }
                 }
             }

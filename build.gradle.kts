@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
-        classpath("com.android.tools.build:gradle:8.6.0") // Diperbarui ke versi yang mendukung compileSdk 35
+        classpath("com.android.tools.build:gradle:8.9.0") // Diperbarui ke versi yang mendukung compileSdk 35
     }
 }
 
