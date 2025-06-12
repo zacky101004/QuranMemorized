@@ -45,6 +45,20 @@ fun DetailSetoranScreen(
     val pureWhite = Color.White
     val softWhite = Color(0xFFFAFAFA)
 
+    // Fungsi untuk memformat tanggal dari YYYY-MM-DD ke DD-MM-YYYY
+    fun formatDate(dateString: String): String {
+        return try {
+            val parts = dateString.split("-")
+            if (parts.size == 3) {
+                "${parts[2]}-${parts[1]}-${parts[0]}"
+            } else {
+                dateString // Return original jika format tidak sesuai
+            }
+        } catch (e: Exception) {
+            dateString // Return original jika ada error
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.fetchSetoranData(context)
     }
@@ -282,7 +296,7 @@ fun DetailSetoranScreen(
                                                             fontWeight = FontWeight.Medium
                                                         )
                                                         Text(
-                                                            text = info.tgl_setoran,
+                                                            text = formatDate(info.tgl_setoran), // Menggunakan fungsi formatDate
                                                             fontSize = 14.sp,
                                                             color = primaryGreen,
                                                             fontWeight = FontWeight.SemiBold
